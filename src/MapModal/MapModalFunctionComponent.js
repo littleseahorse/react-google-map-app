@@ -60,7 +60,7 @@ const Map = () => {
             setClickedUser(user);
           }}
           icon={{
-            url: '/logo.svg',
+            url: '../logo.svg',
             scaledSize: new window.google.maps.Size(45, 45),
           }}
         />
