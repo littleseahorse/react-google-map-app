@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-// import MapModal from './MapModal/MapModalClassComponent.js';
-import MapModal from './MapModal/MapModalFunctionComponent.js';
+import MapModal from './MapModal/MapModalClassComponent.js';
+// import MapModal from './MapModal/MapModalFunctionComponent.js';
 
 const API_KEY = process.env.REACT_APP_GOOGLE_KEY;
 

@@ -11,8 +11,8 @@ import MapStyles from '../mapStyles.js';
 
 class Map extends Component {
   state = {
-    clickedUser: null,
     users: [],
+    clickedUser: null,
   };
 
   fetchData = async (url = '', data = {}) => {
@@ -68,7 +68,7 @@ class Map extends Component {
             }}
             onClick={() => this.setClickedUser(user)}
             icon={{
-              url: '/logo.svg',
+              url: 'logo.svg',
               scaledSize: new window.google.maps.Size(45, 45),
             }}
           />
