@@ -10,46 +10,14 @@ import {
 import MapStyles from '../mapStyles.js';
 
 class Map extends Component {
-  state = {
-    users: [],
-    clickedUser: null,
-  };
-
-  fetchData = async (url = '', data = {}) => {
-    await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => this.setState({ users: data }))
-      .catch((error) => console.log(error));
-  };
-
-  setClickedUser(user) {
-    this.setState({
-      clickedUser: user,
-    });
-  }
-
-  escFunction(e) {
-    if (e.keyCode === 27) {
-      this.setState({
-        clickedUser: null,
-      });
-    }
-  }
-
-  componentDidMount() {
-    this.fetchData('https://jsonplaceholder.typicode.com/users');
-    document.addEventListener('keydown', this.escFunction.bind(this), false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction.bind(this), false);
-  }
-
   render() {
+    const {
+      users,
+      filteredUsers,
+      isFiltered,
+      clickedUser,
+      setClickedUser,
+    } = this.props;
     return (
       <GoogleMap
         defaultZoom={1}
@@ -59,42 +27,58 @@ class Map extends Component {
         }}
         defaultOptions={{ styles: MapStyles }}
       >
-        {this.state.users.map((user) => (
-          <Marker
-            key={user.id}
-            position={{
-              lat: parseFloat(user.address.geo.lat),
-              lng: parseFloat(user.address.geo.lng),
-            }}
-            onClick={() => this.setClickedUser(user)}
-            icon={{
-              url: 'logo.svg',
-              scaledSize: new window.google.maps.Size(45, 45),
-            }}
-          />
-        ))}
-        {this.state.clickedUser && (
+        {!isFiltered &&
+          users.map((user) => (
+            <Marker
+              key={user.id}
+              position={{
+                lat: parseFloat(user.address.geo.lat),
+                lng: parseFloat(user.address.geo.lng),
+              }}
+              onClick={() => setClickedUser(user)}
+              icon={{
+                url: 'logo.svg',
+                scaledSize: new window.google.maps.Size(45, 45),
+              }}
+            />
+          ))}
+        {isFiltered &&
+          filteredUsers.map((user) => (
+            <Marker
+              key={user.id}
+              position={{
+                lat: parseFloat(user.address.geo.lat),
+                lng: parseFloat(user.address.geo.lng),
+              }}
+              onClick={() => setClickedUser(user)}
+              icon={{
+                url: 'logo.svg',
+                scaledSize: new window.google.maps.Size(45, 45),
+              }}
+            />
+          ))}
+        {clickedUser && (
           <InfoWindow
             position={{
-              lat: parseFloat(this.state.clickedUser.address.geo.lat),
-              lng: parseFloat(this.state.clickedUser.address.geo.lng),
+              lat: parseFloat(clickedUser.address.geo.lat),
+              lng: parseFloat(clickedUser.address.geo.lng),
             }}
             onCloseClick={() => {
-              this.setClickedUser(null);
+              setClickedUser(null);
             }}
           >
             <div style={{ textAlign: 'left' }}>
-              <h3>{this.state.clickedUser.company.name}</h3>
+              <h3>{clickedUser.company.name}</h3>
               <p>
-                <i>Service:</i> {this.state.clickedUser.company.catchPhrase}
+                <i>Service:</i> {clickedUser.company.catchPhrase}
               </p>
               <p>
-                <i>Phone:</i> {this.state.clickedUser.phone}
+                <i>Phone:</i> {clickedUser.phone}
               </p>
               <p>
                 <i>Webiste:</i>{' '}
-                <a href={'https://' + this.state.clickedUser.website}>
-                  {this.state.clickedUser.website}
+                <a href={'https://' + clickedUser.website}>
+                  {clickedUser.website}
                 </a>
               </p>
             </div>
